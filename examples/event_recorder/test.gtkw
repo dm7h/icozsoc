@@ -1,0 +1,35 @@
+[*]
+[*] GTKWave Analyzer v3.3.89 (w)1999-2018 BSI
+[*] Sat Jun  2 18:28:44 2018
+[*]
+[dumpfile] "/home/dmin7/code/fpga-event-recorder/src/icotools/icosoc/examples/ev_test_01/test.vcd"
+[dumpfile_mtime] "Sat Jun  2 18:27:58 2018"
+[dumpfile_size] 2835
+[savefile] "/home/dmin7/code/fpga-event-recorder/src/icotools/icosoc/examples/ev_test_01/test.gtkw"
+[timestart] 0
+[size] 1680 1050
+[pos] -568 -16
+*-32.151367 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 254
+[signals_width] 94
+[sst_expanded] 1
+[sst_vpaned_height] 307
+@28
+inputs.input_0
+inputs.input_1
+inputs.input_2
+inputs.input_3
+inputs.input_4
+inputs.input_5
+inputs.input_6
+inputs.input_7
+inputs.input_8
+inputs.input_9
+inputs.input_10
+inputs.input_11
+inputs.input_12
+inputs.input_13
+inputs.input_14
+inputs.input_15
+[pattern_trace] 1
+[pattern_trace] 0

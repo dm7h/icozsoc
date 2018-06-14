@@ -1,0 +1,111 @@
+[*]
+[*] GTKWave Analyzer v3.3.90 (w)1999-2018 BSI
+[*] Mon Jun 11 09:56:49 2018
+[*]
+[dumpfile] "/home/dmin7/code/fpga-event-recorder/src/icotools/icosoc/mod_triggerrec/testbench.vcd"
+[dumpfile_mtime] "Mon Jun 11 09:54:47 2018"
+[dumpfile_size] 444282
+[savefile] "/home/dmin7/code/fpga-event-recorder/src/icotools/icosoc/mod_triggerrec/testbench.gtkw"
+[timestart] 0
+[size] 1680 1050
+[pos] -388 -16
+*-14.000000 50779 11300 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] testbench.
+[treeopen] testbench.uut.
+[sst_width] 254
+[signals_width] 221
+[sst_expanded] 1
+[sst_vpaned_height] 471
+@28
+testbench.uut.clk_fast
+testbench.uut.clk
+@22
+testbench.uut.counter[63:0]
+testbench.uut.ctrl_addr[15:0]
+testbench.uut.ctrl_wdat[31:0]
+testbench.uut.ctrl_wr[3:0]
+testbench.uut.ctrl_rdat[31:0]
+@28
+testbench.uut.ctrl_rd
+testbench.uut.ctrl_done
+testbench.uut.triggers_wr
+testbench.uut.ctrl_state[2:0]
+@22
+testbench.uut.triggers_addr[4:0]
+testbench.uut.triggers_out[31:0]
+testbench.uut.triggers_in[31:0]
+testbench.uut.io_in[15:0]
+testbench.uut.io_buf1[15:0]
+testbench.uut.io_buf2[15:0]
+testbench.uut.data_in[63:0]
+testbench.uut.data_sel[63:0]
+testbench.uut.data_out[63:0]
+@28
+testbench.uut.nempty_in
+testbench.uut.nempty_out
+testbench.uut.pop_out
+testbench.uut.shift_in
+testbench.uut.shift_in_fast
+@22
+testbench.uut.status[31:0]
+testbench.uut.\triggers[0][31:0]
+testbench.uut.\triggers[1][31:0]
+testbench.uut.\triggers[2][31:0]
+testbench.uut.\triggers[3][31:0]
+testbench.uut.\triggers[4][31:0]
+testbench.uut.\triggers[5][31:0]
+testbench.uut.\triggers[6][31:0]
+testbench.uut.\triggers[7][31:0]
+testbench.uut.\triggers[8][31:0]
+testbench.uut.\triggers[9][31:0]
+testbench.uut.\triggers[10][31:0]
+testbench.uut.events_fifo.in_data[63:0]
+testbench.uut.events_fifo.out_data[63:0]
+@28
+testbench.uut.events_fifo.in_clk
+testbench.uut.events_fifo.out_clk
+testbench.uut.events_fifo.in_shift
+testbench.uut.events_fifo.out_pop
+@22
+testbench.uut.events_fifo.\memory[0][63:0]
+testbench.uut.events_fifo.\memory[1][63:0]
+testbench.uut.events_fifo.\memory[2][63:0]
+testbench.uut.events_fifo.\memory[3][63:0]
+testbench.uut.events_fifo.\memory[4][63:0]
+testbench.uut.events_fifo.\memory[5][63:0]
+testbench.uut.events_fifo.\memory[6][63:0]
+testbench.uut.events_fifo.\memory[7][63:0]
+testbench.uut.IO[15:0]
+testbench.uut.io_buf1[15:0]
+testbench.uut.io_buf2[15:0]
+testbench.uut.status[31:0]
+@28
+testbench.uut.status_wr
+testbench.uut.trig1
+testbench.uut.trig2
+testbench.uut.trig3
+@29
+testbench.uut.trig4
+@22
+testbench.uut.t1_io_mask[15:0]
+testbench.uut.t1_io1_xmask[15:0]
+testbench.uut.t1_io2_xmask[15:0]
+testbench.uut.t1_io1_match[15:0]
+testbench.uut.t1_io2_match[15:0]
+testbench.uut.t2_io_mask[15:0]
+testbench.uut.t2_io1_xmask[15:0]
+testbench.uut.t2_io2_xmask[15:0]
+testbench.uut.t2_io1_match[15:0]
+testbench.uut.t2_io2_match[15:0]
+testbench.uut.t3_io1_match[15:0]
+testbench.uut.t3_io1_xmask[15:0]
+testbench.uut.t3_io2_match[15:0]
+testbench.uut.t3_io2_xmask[15:0]
+testbench.uut.t3_io_mask[15:0]
+testbench.uut.t4_io1_match[15:0]
+testbench.uut.t4_io1_xmask[15:0]
+testbench.uut.t4_io2_match[15:0]
+testbench.uut.t4_io2_xmask[15:0]
+testbench.uut.t4_io_mask[15:0]
+[pattern_trace] 1
+[pattern_trace] 0

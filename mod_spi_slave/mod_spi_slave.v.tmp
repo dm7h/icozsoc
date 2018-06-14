@@ -1,0 +1,144 @@
+module icosoc_mod_spi_slave #(
+	parameter integer CLOCK_FREQ_HZ = 0
+) (
+	input clk,
+	input resetn,
+	
+	input clk_in,
+
+	input ctrl_wr,
+	input ctrl_rd,
+	input [ 7:0] ctrl_addr,
+	input [31:0] ctrl_wdat,
+	output reg [31:0] ctrl_rdat,
+	output reg ctrl_done,
+
+	input cs, sclk, mosi,
+	output miso,
+
+	output debug_clk
+);
+	wire spi_mosi, spi_sclk, spi_cs;
+	reg spi_miso;
+
+	reg d_clk = 0;
+	reg a_clk = 0;
+	wire clk_active = clk;
+
+	reg [1:0] mosi_reg;
+	wire mosi_sync = mosi_reg[1];
+	reg [2:0] sclk_reg, cs_reg;
+	wire sclk_rising = !sclk_reg[2] && (sclk_reg[1] | sclk_reg [0]);
+		//sclk_reg[2:1] == 2'b01; // sclk rising edge
+	wire sclk_falling = sclk_reg[2:1] == 2'b10; // sclk falling edge
+	wire cs_active = ~cs_reg[1]; // CS active
+	wire cs_start = cs_reg[2:1] == 2'b10; // CS falling edge (start of SPI message)
+	wire cs_end = cs_reg[2:1] == 2'b10;  // CS rising edge (end of SPI message)
+	
+	reg [24:0] cnt;
+	reg [7:0] spi_data;
+	reg [4:0] spi_state;
+
+	//assign spi_miso = spi_data[7];
+
+	SB_IO #(
+		.PIN_TYPE(6'b 0110_00),
+		.PULLUP(1'b 0)
+	) io_miso (
+		.PACKAGE_PIN(miso),
+		.D_OUT_0(spi_miso)
+	);
+
+	SB_IO #(
+		.PIN_TYPE(6'b 0110_00),
+		.PULLUP(1'b 0)
+	) io_dclk (
+		.PACKAGE_PIN(debug_clk),
+		.D_OUT_0(d_clk)
+	);
+
+
+	SB_IO #(
+		.PIN_TYPE(6'b 0000_01),
+		.PULLUP(1'b 0)
+	) io_mosi (
+		.PACKAGE_PIN(mosi),
+		.D_IN_0(spi_mosi),
+		//.CLOCK_ENABLE(1'b1), // enabled by default
+		//.INPUT_CLK(a_clk)
+	);
+
+	SB_IO #(
+		.PIN_TYPE(6'b 0000_01),
+		.PULLUP(1'b 0)
+	) io_sclk (
+		.PACKAGE_PIN(sclk),
+		//.INPUT_CLK(a_clk),
+		.D_IN_0(spi_sclk)
+	);
+
+	SB_IO #(
+		.PIN_TYPE(6'b 0000_01),
+		.PULLUP(1'b 0)
+	) io_cs (
+		.PACKAGE_PIN(cs),
+		//.INPUT_CLK(a_clk),
+		.D_IN_0(spi_cs)
+	);
+	
+	always @(posedge clk_active) begin
+		a_clk <= ~a_clk;
+	end
+	
+	always @(posedge clk) begin
+		ctrl_rdat <= 'bx;
+		ctrl_done <= 0;
+				
+		sclk_reg <= { sclk_reg[1:0], spi_sclk };
+		cs_reg <= { cs_reg[1:0], spi_cs };
+		mosi_reg <= { mosi_reg[0], spi_mosi };
+		//spi_miso <= spi_data[7];
+		
+
+		if (!resetn |  !cs_active) begin
+			spi_miso <= 0;
+			spi_state <= 0;
+			spi_data <= 'h85;
+			cnt <= 0;
+
+		end else
+		if (!ctrl_done) begin
+			spi_state <= spi_state;		
+			if (ctrl_wr) begin
+				//ctrl_done <= 1;
+				if (ctrl_addr == 'h00) begin
+					//spi_state <= (spi_state == 8)? 0 : spi_state;
+					if (sclk_rising) begin
+						/*
+						if (spi_state == 0) begin
+							spi_data <= { ctrl_wdat[6:0], mosi_sync };
+							spi_miso <= ctrl_wdat[7];
+						end else begin
+							spi_data <= {spi_data[6:0], mosi_sync};
+							spi_miso <= spi_data[7];
+						end
+						*/
+					       	spi_data <= ctr_wdat;
+						spi_miso
+						spi_state <= (spi_state == 8)? spi_state : spi_state + 1;
+					end
+					
+				end
+				ctrl_done <= (spi_state == 8);
+			end
+			if (ctrl_rd) begin
+				ctrl_done <= 1;
+				if (ctrl_addr == 'h00) ctrl_rdat <= spi_data;
+			end
+		end
+		d_clk <= sclk_rising;
+		//d_clk <= !ctrl_done;
+
+	end
+endmodule
+

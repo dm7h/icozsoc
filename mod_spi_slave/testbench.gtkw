@@ -1,0 +1,49 @@
+[*]
+[*] GTKWave Analyzer v3.3.89 (w)1999-2018 BSI
+[*] Mon May 21 14:55:24 2018
+[*]
+[dumpfile] "/home/dmin7/code/fpga-event-recorder/src/icotools/icosoc/mod_spi_slave/testbench.vcd"
+[dumpfile_mtime] "Mon May 21 13:54:14 2018"
+[dumpfile_size] 26270
+[savefile] "/home/dmin7/code/fpga-event-recorder/src/icotools/icosoc/mod_spi_slave/testbench.gtkw"
+[timestart] 0
+[size] 1890 1170
+[pos] 567 -106
+*-9.000000 7796 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] testbench.
+[treeopen] testbench.uut.
+[sst_width] 254
+[signals_width] 174
+[sst_expanded] 1
+[sst_vpaned_height] 370
+@28
+testbench.uut.clk
+testbench.uut.cs
+testbench.uut.cs_active
+testbench.uut.cs_end
+@29
+testbench.uut.cs_start
+@28
+testbench.uut.ctrl_rd
+@22
+testbench.uut.ctrl_rdat[31:0]
+@28
+testbench.uut.ctrl_wr
+@22
+testbench.uut.ctrl_wdat[31:0]
+@28
+testbench.uut.ctrlwr_start
+testbench.uut.ctrl_done
+@22
+testbench.uut.spi_data_in[31:0]
+testbench.uut.spi_data_out[31:0]
+@28
+testbench.uut.spi_miso
+testbench.uut.spi_mosi
+testbench.uut.spi_sclk
+@22
+testbench.uut.spi_state[5:0]
+@28
+testbench.uut.sclk_rising
+[pattern_trace] 1
+[pattern_trace] 0

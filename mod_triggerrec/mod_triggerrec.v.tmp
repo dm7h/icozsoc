@@ -1,0 +1,190 @@
+module icosoc_mod_triggerrec #(
+	parameter integer CLOCK_FREQ_HZ = 0,
+	parameter integer MAX_EVENTS = 16,
+	parameter integer IO_LENGTH = 16
+) (
+	input clk,
+	input resetn,
+
+	input [3:0] ctrl_wr,
+	input ctrl_rd,
+	input [15:0] ctrl_addr,
+	input [31:0] ctrl_wdat,
+	output reg [31:0] ctrl_rdat,
+	output reg ctrl_done,
+
+	input [IO_LENGTH-1:0] IO
+);
+	wire [IO_LENGTH-1:0] io_in;
+	
+	reg ctrl_state;
+
+	reg [63:0] trigger_0, trigger_1, trigger_2, trigger_3;
+	reg [63:0] trigger_4, trigger_5, trigger_6, trigger_7;
+	reg [63:0] trigger_8, trigger_9, trigger_10, trigger_11;
+	reg [63:0] trigger_12, trigger_13, trigger_14, trigger_15;
+
+	initial begin 
+	 	{ trigger_0, trigger_1, trigger_2, trigger_3,
+		  trigger_4, trigger_5, trigger_6, trigger_7,
+		  trigger_8, trigger_9, trigger_10, trigger_11,
+		  trigger_12, trigger_13, trigger_14, trigger_15 } = {16 {64'hFFFFFFFFFFFFFFFF}};
+	end
+
+
+	reg [63:0] counter;
+
+	SB_IO #(
+		.PIN_TYPE(6'b 0000_01),
+		.PULLUP(1'b 0)
+	) ios [IO_LENGTH-1:0] (
+		.PACKAGE_PIN(IO),
+		.D_IN_0(io_in)
+	);
+
+	always @(posedge clk) begin
+		ctrl_rdat <= 'bx;
+		ctrl_done <= 0;
+
+		counter <= counter + 1;
+		
+		if (!resetn) begin
+		       counter <= 0;
+		       ctrl_state <= 0;
+	       	end else;	       
+			
+		if (!ctrl_done) begin
+			if (|ctrl_wr) begin
+				ctrl_done <= 1;
+				if (ctrl_addr == 8) begin
+					if (ctrl_state == 0) 
+						counter[63:32] <= ctrl_wdat;
+					else
+						counter[31:0] <= ctrl_wdat;
+					ctrl_state <= ~ctrl_state;
+				end
+				if (ctrl_addr == 'h100) begin
+					if (ctrl_state == 0) 
+						trigger_0[63:32] <= ctrl_wdat;
+					else
+						trigger_0[31:0] <= ctrl_wdat;
+					ctrl_state <= ~ctrl_state;
+				end
+
+				if (ctrl_addr == 'h104) begin
+					if (ctrl_state == 0) 
+						trigger_1[63:32] <= ctrl_wdat;
+					else
+						trigger_1[31:0] <= ctrl_wdat;
+					ctrl_state <= ~ctrl_state;
+				end
+
+				if (ctrl_addr == 'h108) begin
+					if (ctrl_state == 0) 
+						trigger_2[63:32] <= ctrl_wdat;
+					else
+						trigger_2[31:0] <= ctrl_wdat;
+					ctrl_state <= ~ctrl_state;
+				end
+			
+				if (ctrl_addr == 'h10c) begin
+					if (ctrl_state == 0) 
+						trigger_3[63:32] <= ctrl_wdat;
+					else
+						trigger_3[31:0] <= ctrl_wdat;
+					ctrl_state <= ~ctrl_state;
+				end
+			
+				if (ctrl_addr == 'h110) begin
+					if (ctrl_state == 0) 
+						trigger_4[63:32] <= ctrl_wdat;
+					else
+						trigger_4[31:0] <= ctrl_wdat;
+					ctrl_state <= ~ctrl_state;
+				end
+			
+				if (ctrl_addr == 'h114) begin
+					if (ctrl_state == 0) 
+						trigger_5[63:32] <= ctrl_wdat;
+					else
+						trigger_5[31:0] <= ctrl_wdat;
+					ctrl_state <= ~ctrl_state;
+				end
+			
+				if (ctrl_addr == 'h118) begin
+					if (ctrl_state == 0) 
+						trigger_6[63:32] <= ctrl_wdat;
+					else
+						trigger_6[31:0] <= ctrl_wdat;
+					ctrl_state <= ~ctrl_state;
+				end
+			
+				if (ctrl_addr == 'h11c) begin
+					if (ctrl_state == 0) 
+						trigger_7[63:32] <= ctrl_wdat;
+					else
+						trigger_7[31:0] <= ctrl_wdat;
+					ctrl_state <= ~ctrl_state;
+				end
+						
+			end
+			if (ctrl_rd) begin
+				ctrl_done <= 1;
+				if (ctrl_addr == 0) ctrl_rdat <= io_in;
+				if (ctrl_addr == 8) begin
+					ctrl_rdat <= (ctrl_state)? counter[31:0] : counter[63:32];
+					ctrl_state <= ~ctrl_state;
+				end
+
+				if (ctrl_addr == 'h100) begin
+					ctrl_rdat <= (ctrl_state)? trigger_0[31:0] : trigger_0[63:32];
+					ctrl_state <= ~ctrl_state;
+				end
+
+
+				if (ctrl_addr == 'h104) begin
+					ctrl_rdat <= (ctrl_state)? trigger_1[31:0] : trigger_1[63:32];
+					ctrl_state <= ~ctrl_state;
+				end
+
+
+				if (ctrl_addr == 'h108) begin
+					ctrl_rdat <= (ctrl_state)? trigger_2[31:0] : trigger_2[63:32];
+					ctrl_state <= ~ctrl_state;
+				end
+
+
+				if (ctrl_addr == 'h10c) begin
+					ctrl_rdat <= (ctrl_state)? trigger_3[31:0] : trigger_3[63:32];
+					ctrl_state <= ~ctrl_state;
+				end
+
+
+				if (ctrl_addr == 'h110) begin
+					ctrl_rdat <= (ctrl_state)? trigger_4[31:0] : trigger_4[63:32];
+					ctrl_state <= ~ctrl_state;
+				end
+
+
+				if (ctrl_addr == 'h114) begin
+					ctrl_rdat <= (ctrl_state)? trigger_5[31:0] : trigger_5[563:32];
+					ctrl_state <= ~ctrl_state;
+				end
+
+
+				if (ctrl_addr == 'h118) begin
+					ctrl_rdat <= (ctrl_state)? trigger_6[31:0] : trigger_6[63:32];
+					ctrl_state <= ~ctrl_state;
+				end
+
+
+				if (ctrl_addr == 'h11c) begin
+					ctrl_rdat <= (ctrl_state)? trigger_7[31:0] : trigger_7[63:32];
+					ctrl_state <= ~ctrl_state;
+				end
+
+			end
+		end
+	end
+endmodule
+

@@ -1,0 +1,4 @@
+flash id: 20 ba 17 10 00 00 23 63 63 21 02 00 53 00 56 02 11 16 c9 a3
+writing 131.93kB..
+  0% @000000 erasing 64kB sector..
+  0% @000000 writing: ooooooooooooooooooooooooo
