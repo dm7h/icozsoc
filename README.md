@@ -1,4 +1,5 @@
-#icozsoc
+icozsoc
+=======
 
 IcoSoc port for the icezero FPGA shield.
 NOTE: the RASPIF parallel bus to the raspberry pi zero has been removed 
