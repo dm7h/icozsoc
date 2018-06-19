@@ -1,3 +1,15 @@
+icozsoc
+=======
+
+IcoSoc port for the icezero FPGA shield.
+
+NOTE: the RASPIF parallel bus to the raspberry pi zero has been removed 
+and replaced with a simple UART from https://github.com/lawrie/icotools/tree/master/icosoc
+
+Therefor the built-in IcoSoc debugging functionality is not available as is.
+
+
+original README:
 
       *************************************************************
       * IcoSoC -- A PicoRV32-based SoC generator for the IcoBoard *
