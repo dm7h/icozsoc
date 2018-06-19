@@ -126,8 +126,7 @@ module testbench;
 		$display("Timestamp: \t%s (lower bytes)", (ctrl_rdat == 2)? "OK" : "NOK");	
 		repeat (10) @(posedge clk);
 
-		// restart counter
-		//ctrl_write('h4, 'h01); 
+
 		//repeat (10) @(posedge clk);
 	
 			
@@ -239,8 +238,23 @@ module testbench;
 		IO <= 0; // x		
 		repeat (20) @(posedge clk);
 		
-		repeat (10) read_fifo();
-
+		repeat (20) read_fifo();
+		IO <= 'h7F01; // start
+		@(posedge clk);		
+		IO <= 'h0003; // clk
+		@(posedge clk);
+		IO <= 'h0000; // end
+		repeat (2) read_fifo();
+		ctrl_read('h0);
+		// restart counter
+		ctrl_write('h8, 'h00); 
+		ctrl_write('h8, 'h00); 	
+		repeat (100) @(posedge clk);
+		IO <= 'h0001; // end
+		repeat (20) @(posedge clk);
+		repeat (1) read_fifo();
+		repeat (20) @(posedge clk);
+		
 
 		$finish;
 	end

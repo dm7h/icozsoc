@@ -343,7 +343,7 @@ module icosoc_mod_triggerrec #(
 		// on input changes ..
 		if ((io_buf2 != io_buf1)) begin
 
-
+			/*
 			// hardcoded triggers
 			if ((io_buf2[0] == 0) && (io_buf1[0] == 1))
 				status <= 1;
@@ -353,7 +353,8 @@ module icosoc_mod_triggerrec #(
 				status <= 3;
 			else if ((io_buf2[1] == 1) && (io_buf1[1] == 0))
 				status <= 1;
-			
+			*/
+
 			/*
 			// (always) do event detection
 			for (i = 0; i < (MAX_EVENTS-1); i=i+1) begin

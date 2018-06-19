@@ -97,7 +97,8 @@ __attribute__ ((section (".text.sram"))) int main(void)
 	//icosoc_gpio_dir(0xffff);
 
 	// setup events array 
-	uint64_t events[MAX_EVENTS] = { 0xFFFF0000FFFF0000 }; // note: fpga registers are already initialized 
+	uint64_t events[MAX_EVENTS]; // note: fpga registers are already initialized 
+	uint8_t num_events = 0;
 
 	// main loop	
 	uint32_t cmd, status = 0, event[2];	
@@ -105,44 +106,46 @@ __attribute__ ((section (".text.sram"))) int main(void)
 	uint8_t stat_buffer = 0;
 	
 	for (uint8_t i = 0; ; i++) {
-		//status = icosoc_tr0_get_status();
+		status = icosoc_tr0_get_status();
 		// set leds
 		icosoc_leds(((stat_buffer > 0)? 4: 0) + ((status > 1)? 2 : 0) + ((status > 0)? 1 : 0));
 		
 		// push events from BRAM fifo to SRAM buffer 
-		if (fifo0 != 0)
-			fifo_last = fifo0;
 		fifo0 = icosoc_tr0_get_fifo(0);
 		if (fifo0 != 0) {
 			//printf("status: %lu | fifo0: 0x%016llx | fifo_old: 0x%016llx\r\n", status, fifo0, fifo_last);
 
 			// event detection
-			uint16_t mask, old_xmask, new_xmask, old_comp, new_comp;
-			for (uint8_t t = 0; t < 8; t++) {
+			uint16_t mask, old_xmask, new_xmask, old_comp, new_comp, match, function;
+			for (uint8_t t = 0; t <= num_events; t++) {
 				// get input mask from event definition
 				mask = (events[t] >> 32) & 0xFFFF;
 				// apply input mask to old and new (fifo) input
-				old_xmask = ((fifo_last >> 48) & 0xFFFF) | mask;
-				new_xmask = ((fifo0 >> 48) & 0xFFFF) | mask;
+				old_xmask = ((fifo_last >> 48) & 0xFFFF) & mask;
+				new_xmask = ((fifo0 >> 48) & 0xFFFF) & mask;
 				// compare masked results with event definition
 				old_comp = old_xmask ^ ((events[t] >> 16) & 0xFFFF);
 				new_comp = new_xmask ^ (events[t] & 0xFFFF);
 				// if both "compares" are 0x0000 we have a match!
-				uint8_t match = !(new_comp || old_comp);
+				match = !(new_comp || old_comp);
 				if (match) {
-					uint8_t function = (events[t] >> 48) & 0x00FF;
-					printf("event[%d] match: mask: %04x | old_x: %04x | new_x: %04x | old_m: %04x | new_m: %04x | trig %d | func: %d\r\n",t, mask, old_xmask, new_xmask, old_comp, new_comp, match, function >> 1);
+					
+					function = ((events[t] >> 48) & 0x00FF) >> 1;
+					
+					//printf("event[%d] match: mask: %04x | old_x: %04x | new_x: %04x | old_m: %04x | new_m: %04x | trig %d | func: %d\r\n",t, mask, old_xmask, new_xmask, old_comp, new_comp, match, function >> 1);
 					
 					// get event function
-					if (function)
-						status = function >> 1;
-					
+					if (function) {
+						printf("got new function: %d\r\n", function);
+						status = function;
+						icosoc_tr0_set_status(status);
+					}
 					// set counter to 0?
 					//if (function == 3)
 					//	icosoc_tr0_set_counter(0);
 					
 					// push into sram buffer
-					if ((status == 1) || function)
+					if ((status == 1)) //|| function)
 						stat_buffer += (BufferIn(fifo0))? 0 : 1;
 				}	
 			}
@@ -151,6 +154,7 @@ __attribute__ ((section (".text.sram"))) int main(void)
 
 			// check if sram buffer is full and we have a overflow
 			if (stat_buffer > 0) printf("sram overflow!\r\b");
+			fifo_last = fifo0;
 			continue; // continue until we got all events	
 		}
 		cmd = icosoc_spi0_xfer(0);
@@ -175,6 +179,8 @@ __attribute__ ((section (".text.sram"))) int main(void)
 				       	icosoc_tr0_set_trigger((uint8_t) event_id, events[event_id]);
 					event64 = icosoc_tr0_get_trigger((uint8_t) event_id);	
 					printf("spi0: got new event configuration %lu: %016llx\r\n", event_id, event64); //events[event_id]);
+					if (event_id > num_events)
+						num_events = event_id;
 				} 
 				else
 				{
